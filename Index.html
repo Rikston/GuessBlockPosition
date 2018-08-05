@@ -6,24 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/ValueCounter.css">
     <link rel="stylesheet" href="CSS/GBPStyle.css">
 </head>
 
 <body>
+    <div id="modalWindow" class="modal-window">
+        <div class="flex-container">
 
-
-    <div class="gbp-container">
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
-        <div class="gbp-block"></div>
+            <div class="flex-container flex-column">
+                <span>rows</span>
+                <counter name="rows" value="3"></counter>
+            </div>
+            <div class="flex-container flex-column">
+                <span>columns</span>
+                <counter name="columns" value="3"></counter>
+            </div>
+        </div>
+        <button id="start">Start</button>
     </div>
+    <gbp></gbp>
+    <script src="JS/ValueCounter.js"></script>
     <script src="JS/GBPLogic.js"></script>
+    <script src="JS/logic.js"></script>
 </body>
 
 </html>
