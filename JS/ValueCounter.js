@@ -49,7 +49,7 @@ function Counter(settings) {
     "input",
     function() {
       if (this.value.textContent.isDigit()) {
-        this.Value = this.value.val;
+        this.Value = Number(this.value.textContent);
       }
     }.bind(this),
     true
@@ -57,7 +57,7 @@ function Counter(settings) {
   Object.defineProperties(this, {
     Value: {
       get: function() {
-        return val;
+        return Number(val);
       },
       set: function(value) {
         this.value.textContent = value.toFixed(3);

@@ -20,6 +20,7 @@ let GuessBlockPosition = (function() {
           this.classList.toggle("choose");
         });
         item.addEventListener("mouseenter", function() {
+          console.log(answer);
           if (isMouseDown) this.classList.toggle("choose");
         });
       });
@@ -42,9 +43,9 @@ let GuessBlockPosition = (function() {
       },
       set: function(val) {
         let isshow = isShow;
-        if (isshow) this.show();
+        if (isshow) this.check();
         pattern = val;
-        answer = rightAnswer = pattern.reduce(
+        answer = pattern.reduce(
           function(pre, item) {
             if (item) {
               ++pre.right;
@@ -55,7 +56,7 @@ let GuessBlockPosition = (function() {
           },
           { right: 0, wrong: 0 }
         );
-        if (isshow) this.show();
+        if (isshow) this.check();
       }
     },
     isShow: {
