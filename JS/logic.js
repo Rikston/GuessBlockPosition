@@ -11,11 +11,16 @@ window.addEventListener("load", function() {
         counters.rows.Value,
         counters.columns.Value
       ),
-      selector: "gbp"
+      selector: "gbp",
+      onCheck: function(result) {
+        window["rightAnswer"].textContent = result.right;
+        window["wrongAnswer"].textContent = result.wrong;
+        window["selected"].textContent = result.selected;
+      }
     });
     gbp.check();
     setTimeout(function() {
-      gbp.check();
+      let result = gbp.check();
     }, 1000);
   });
   modalWindow.addEventListener("transitionend", function(e) {

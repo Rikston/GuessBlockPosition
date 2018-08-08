@@ -14,3 +14,40 @@ body {
 * {
   font-family: Roboto;
 }
+
+.left-side {
+  flex: 3 1 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-side {
+  flex: 2 1 0;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.info-block {
+  flex: 0 0 40%;
+  width: 100%;
+  display: flex;
+  border-radius: 5px;
+}
+
+.red {
+  background: darkred;
+}
+.kv {
+  color: white;
+  margin: 5px;
+}
+.key {
+}
+.value {
+  text-align: center;
+}

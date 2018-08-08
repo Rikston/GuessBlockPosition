@@ -1,5 +1,7 @@
 function Counter(settings) {
-  var val = settings.value || 0;
+  let val = settings.value || 0;
+  let max = settings.max || Infinity;
+  let min = settings.min || -Infinity;
   this.step = settings.step || 1;
   this.node = document.createElement("div");
   this.node.classList.add("counter-box");
@@ -57,15 +59,17 @@ function Counter(settings) {
   Object.defineProperties(this, {
     Value: {
       get: function() {
-        return Number(val);
+        return val;
       },
       set: function(value) {
-        this.value.textContent = value.toFixed(3);
-        this.onChangeValue({
-          value: value,
-          increase: val > value ? false : true
-        });
-        val = value;
+        if (min <= value && value <= max) {
+          this.value.textContent = value.toFixed(3);
+          this.onChangeValue({
+            value: value,
+            increase: val > value ? false : true
+          });
+          val = value;
+        }
       }
     }
   });
@@ -79,8 +83,10 @@ Counter.ReplaceCounter = function(selector) {
     throw new ReferenceError("selector don't exist");
   }
   let newCounter = new Counter({
-    value: counter.getAttribute("value"),
-    step: counter.getAttribute("step")
+    value: Number(counter.getAttribute("value")),
+    step: Number(counter.getAttribute("step")),
+    max: Number(counter.getAttribute("max")),
+    min: Number(counter.getAttribute("min"))
   });
   let parent = counter.parentNode;
   parent.replaceChild(newCounter.node, counter);

@@ -13,19 +13,36 @@
 <body>
     <div id="modalWindow" class="modal-window">
         <div class="flex-container">
-
             <div class="flex-container flex-column">
                 <span>rows</span>
-                <counter name="rows" value="3"></counter>
+                <counter name="rows" value="3" min="1" max="10"></counter>
             </div>
             <div class="flex-container flex-column">
                 <span>columns</span>
-                <counter name="columns" value="3"></counter>
+                <counter name="columns" value="3" min="1" max="10"></counter>
             </div>
         </div>
         <button id="start">Start</button>
     </div>
-    <gbp></gbp>
+    <div class="left-side">
+        <gbp></gbp>
+    </div>
+    <div class="right-side">
+        <div class="info-block red">
+            <div class="kv">
+                <h3 class="key">right</h3>
+                <div id="rightAnswer" class="value">5</div>
+            </div>
+            <div class="kv">
+                <h3 class="key">wrong</h3>
+                <div id="wrongAnswer" class="value">5</div>
+            </div>
+            <div class="kv">
+                <h3 class="key">number of selected</h3>
+                <div id="selected" class="value">5</div>
+            </div>
+        </div>
+    </div>
     <script src="JS/ValueCounter.js"></script>
     <script src="JS/GBPLogic.js"></script>
     <script src="JS/logic.js"></script>
