@@ -5,18 +5,21 @@ let GuessBlockPosition = (function() {
     */
   let pattern = null;
   let isShow = false;
-  let answer = { right: 0, wrong: 0, maxSelected: 0 };
+  let information = { right: 0, wrong: 0, maxSelected: 0 };
   let isMouseDown = false;
   function GBP(settings) {
     let CreateNode = function(rows, cols) {
       let MouseDown = function(e) {
         if (e.target.classList.contains("choose")) e.target.unselect();
         else {
-          if (answer.maxSelected != answer.right) {
+          if (information.maxSelected != this.information.selected) {
             e.target.select();
-            pattern[e.target.tabIndex] ? ++answer.right : ++answer.wrong;
-            if (answer.maxSelected == answer.right + answer.wrong) {
-              this.onCheck(this.check(), this);
+            pattern[e.target.tabIndex]
+              ? ++information.right
+              : ++information.wrong;
+            if (information.maxSelected == this.information.selected) {
+              this.onEqual(this.information, this);
+              this.show();
             }
           }
         }
@@ -33,14 +36,14 @@ let GuessBlockPosition = (function() {
         block.tabIndex = i;
         block.select = function() {
           this.classList.add("choose");
-          ++answer.selected;
+          ++information.selected;
         };
         block.unselect = function() {
           this.classList.remove("choose");
-          --answer.selected;
+          --information.selected;
         };
         block.addEventListener("mousedown", MouseDown);
-        if (settings.onCheck)
+        if (settings.onShow)
           block.addEventListener("mouseenter", function(e) {
             if (isMouseDown) {
               MouseDown.call(this, e);
@@ -53,7 +56,9 @@ let GuessBlockPosition = (function() {
       return gbp_container;
     }.bind(this);
     try {
-      this.onCheck = settings.onCheck || function() {};
+      this.onShow = settings.onShow || function() {};
+      this.onHide = settings.onHide || function() {};
+      this.onEqual = settings.onEqual || function() {};
       if (!settings.rows || !settings.cols)
         throw new SettingsError("dimensions");
 
@@ -81,9 +86,10 @@ let GuessBlockPosition = (function() {
       },
       set: function(val) {
         let isshow = isShow;
-        if (isshow) this.check();
+        if (isshow) this.hide();
+        this.clearSelected();
         pattern = val;
-        answer = pattern.reduce(
+        information = pattern.reduce(
           function(pre, item) {
             if (item) {
               ++pre.maxSelected;
@@ -92,7 +98,7 @@ let GuessBlockPosition = (function() {
           },
           { right: 0, wrong: 0, maxSelected: 0 }
         );
-        if (isshow) this.check();
+        if (isshow) this.show();
       }
     },
     isShow: {
@@ -100,39 +106,46 @@ let GuessBlockPosition = (function() {
         return true;
       }
     },
-    answer: {
+    information: {
       get: function() {
         return {
-          right: answer.right,
-          wrong: answer.wrong,
-          selected: answer.right + answer.wrong,
-          maxSelected: answer.maxSelected
+          right: information.right,
+          wrong: information.wrong,
+          selected: information.right + information.wrong,
+          maxSelected: information.maxSelected
         };
+      }
+    },
+    isRight: {
+      get: function() {
+        return information.right == information.maxSelected;
       }
     }
   });
-  GBP.prototype.check = function() {
-    isShow = !isShow;
+  GBP.prototype.show = function() {
+    isShow = true;
     for (let i = 0; i < this.node.children.length; ++i) {
       if (this.pattern[i]) {
-        this.node.children[i].classList.toggle("right");
+        this.node.children[i].classList.add("right");
       } else {
         if (this.node.children[i].classList.contains("choose")) {
-          this.node.children[i].classList.toggle("wrong");
+          this.node.children[i].classList.add("wrong");
         }
       }
     }
-    obj.notAnswer = answer.right - obj.right;
-    return obj;
+    this.onShow(this.information, this);
   };
-  GBP.getInfo = function() {
-    let obj = {
-      right: 0,
-      wrong: 0,
-      notAnswer: 0,
-      maxSelected: answer.maxSelected,
-      selected: this.answer.selected
-    };
+  GBP.prototype.hide = function() {
+    isShow = false;
+    for (let i = 0; i < this.node.children.length; ++i) {
+      this.node.children[i].classList.remove("right", "wrong");
+    }
+    this.onHide(this.information, this);
+  };
+  GBP.prototype.clearSelected = function() {
+    Array.prototype.forEach.call(this.node.children, function(item) {
+      item.classList.remove("choose", "wrong", "right");
+    });
   };
   GBP.ReplaceNE = function(selector, gbp) {
     let nodeElement = document.querySelector(selector);
@@ -144,9 +157,13 @@ let GuessBlockPosition = (function() {
   };
   GBP.GeneratePattern = function(rows, cols) {
     let pattern = [];
-    for (let i = rows * cols; i > 0; --i) {
+    let length = null;
+    if (rows instanceof GuessBlockPosition) length = rows.pattern.length;
+    else length = rows * cols;
+    for (let i = length; i > 0; --i) {
       pattern.push(Math.random() > 0.5 ? true : false);
     }
+    if (rows.pattern) gbp.pattern = pattern;
     return pattern;
   };
   return GBP;

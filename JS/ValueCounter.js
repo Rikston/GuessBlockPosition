@@ -5,7 +5,7 @@ function Counter(settings) {
   this.step = settings.step || 1;
   this.node = document.createElement("div");
   this.node.classList.add("counter-box");
-
+  this.round = settings.round || 0;
   this.buttonUp = document.createElement("div");
   this.buttonUp.classList.add("button-up");
   let i = document.createElement("i");
@@ -50,11 +50,17 @@ function Counter(settings) {
   this.value.addEventListener(
     "input",
     function() {
-      if (this.value.textContent.isDigit()) {
+      if (Number(this.value.textContent != NaN)) {
         this.Value = Number(this.value.textContent);
       }
     }.bind(this),
     true
+  );
+  this.value.addEventListener(
+    "blur",
+    function() {
+      this.value.textContent = val;
+    }.bind(this)
   );
   Object.defineProperties(this, {
     Value: {
@@ -63,7 +69,7 @@ function Counter(settings) {
       },
       set: function(value) {
         if (min <= value && value <= max) {
-          this.value.textContent = value.toFixed(3);
+          this.value.textContent = value.toFixed(this.round);
           this.onChangeValue({
             value: value,
             increase: val > value ? false : true
@@ -86,7 +92,8 @@ Counter.ReplaceCounter = function(selector) {
     value: Number(counter.getAttribute("value")),
     step: Number(counter.getAttribute("step")),
     max: Number(counter.getAttribute("max")),
-    min: Number(counter.getAttribute("min"))
+    min: Number(counter.getAttribute("min")),
+    round: Number(counter.getAttribute("round"))
   });
   let parent = counter.parentNode;
   parent.replaceChild(newCounter.node, counter);

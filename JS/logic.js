@@ -1,4 +1,5 @@
 let gbp = null;
+let levels = null;
 let counters = null;
 window.addEventListener("load", function() {
   counters = Counter.ReplaceAllCounter("counter");
@@ -12,15 +13,54 @@ window.addEventListener("load", function() {
         counters.columns.Value
       ),
       selector: "gbp",
-      onCheck: function(result) {
+      onShow: function(result) {
         window["rightAnswer"].textContent = result.right;
         window["wrongAnswer"].textContent = result.wrong;
         window["selected"].textContent = result.selected;
+      },
+      onEqual: function() {
+        setTimeout(function() {
+          levels.next();
+        }, 500);
       }
     });
-    gbp.check();
+    levels = new TableLevel({
+      numberLevel: 5,
+      whatDoOnLevel: {
+        1: function() {
+          GuessBlockPosition.GeneratePattern(gbp);
+          setTimeout(function() {
+            gbp.hide();
+          }, 1000);
+        },
+        2: function() {
+          GuessBlockPosition.GeneratePattern(gbp);
+          setTimeout(function() {
+            gbp.hide();
+          }, 1000);
+        },
+        3: function() {
+          GuessBlockPosition.GeneratePattern(gbp);
+          setTimeout(function() {
+            gbp.hide();
+          }, 1000);
+        },
+        4: function() {
+          GuessBlockPosition.GeneratePattern(gbp);
+          setTimeout(function() {
+            gbp.hide();
+          }, 1000);
+        }
+      },
+      onNext: function(t) {
+        if (gbp.isRight) t.now.right();
+        else t.now.wrong();
+      }
+    });
+    rightSide.appendChild(levels.node);
+    gbp.show();
     setTimeout(function() {
-      let result = gbp.check();
+      gbp.hide();
     }, 1000);
   });
   modalWindow.addEventListener("transitionend", function(e) {

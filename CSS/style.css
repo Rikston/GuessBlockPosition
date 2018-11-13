@@ -30,6 +30,7 @@ body {
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: center;
+  padding: 2px;
 }
 
 .info-block {
@@ -37,10 +38,18 @@ body {
   width: 100%;
   display: flex;
   border-radius: 5px;
+  margin: 3px;
 }
 
 .red {
   background: darkred;
+}
+
+.blue {
+  background: #7070e8;
+}
+.efor {
+  background: #30ffa0;
 }
 .kv {
   color: white;
@@ -48,6 +57,21 @@ body {
 }
 .key {
 }
+.big-title {
+  font-weight: 500;
+  font-size: 25px;
+}
 .value {
   text-align: center;
+}
+
+.point {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: inline-block;
+}
+.point:last-child {
+  margin-right: 0;
 }
